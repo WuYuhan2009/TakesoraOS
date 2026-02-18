@@ -112,14 +112,25 @@ sudo apt-get -f install
 ./build.sh
 ```
 
-### Q3：想彻底重来
+### Q3：`lb config: unrecognized`
+不同版本的 live-build 支持参数不一致。当前 `build.sh` 已做自动兼容：会先检测 `lb config --help`，仅传递当前版本支持的参数。
+
+如你仍遇到报错，请先升级 live-build 后重试：
+
+```bash
+sudo apt-get update
+sudo apt-get install -y live-build
+./build.sh
+```
+
+### Q4：想彻底重来
 
 ```bash
 ./clean.sh
 ./build.sh
 ```
 
-### Q4：AI 默认是否启用？
+### Q5：AI 默认是否启用？
 - 当你提供 `TAKESORA_AI_API_KEY`（或交互输入 API Key）时，脚本会写入 `AI_ENABLED_BY_DEFAULT=1`，默认启用 AI。
 - 当 API Key 为空时，脚本会写入 `AI_ENABLED_BY_DEFAULT=0`，默认禁用 AI。
 

@@ -15,6 +15,28 @@ require_cmd() {
   }
 }
 
+LB_CONFIG_HELP_CACHE=""
+
+lb_option_supported() {
+  local option="$1"
+  if [[ -z "$LB_CONFIG_HELP_CACHE" ]]; then
+    LB_CONFIG_HELP_CACHE="$(lb config --help 2>&1 || true)"
+  fi
+  grep -q -- "$option" <<< "$LB_CONFIG_HELP_CACHE"
+}
+
+add_lb_arg_if_supported() {
+  local opt="$1"
+  local val="${2:-}"
+  if lb_option_supported "$opt"; then
+    LB_ARGS+=("$opt")
+    if [[ -n "$val" ]]; then
+      LB_ARGS+=("$val")
+    fi
+  else
+    echo "[WARN] lb config does not support $opt, skipping."
+  fi
+}
 
 fix_invalid_apt_sources() {
   echo "[INFO] Checking APT sources for deprecated Debian security entries..."
@@ -86,29 +108,34 @@ EOT
 configure_live_build() {
   echo "[INFO] Configuring live-build..."
   lb clean --purge || true
-  lb config \
-    --mode debian \
-    --distribution bookworm \
-    --architectures amd64 \
-    --linux-flavours amd64 \
-    --binary-images iso-hybrid \
-    --archive-areas "main contrib non-free non-free-firmware" \
-    --bootappend-live "boot=live components quiet splash locales=zh_CN.UTF-8,en_US.UTF-8 username=user hostname=takesoraos" \
-    --debian-installer live \
-    --debian-installer-gui true \
-    --firmware-binary true \
-    --firmware-chroot true \
-    --iso-application "TakesoraOS" \
-    --iso-publisher "TakesoraOS Project" \
-    --iso-volume "TakesoraOS Live" \
-    --mirror-bootstrap "http://deb.debian.org/debian/" \
-    --mirror-chroot "http://deb.debian.org/debian/" \
-    --mirror-chroot-security "http://security.debian.org/debian-security/" \
-    --mirror-binary "http://deb.debian.org/debian/" \
-    --mirror-binary-security "http://security.debian.org/debian-security/" \
-    --security true \
-    --updates true \
-    --memtest memtest86+
+
+  LB_ARGS=(
+    --mode debian
+    --distribution bookworm
+    --architectures amd64
+    --linux-flavours amd64
+    --binary-images iso-hybrid
+    --archive-areas "main contrib non-free non-free-firmware"
+    --bootappend-live "boot=live components quiet splash locales=zh_CN.UTF-8,en_US.UTF-8 username=user hostname=takesoraos"
+    --debian-installer live
+    --debian-installer-gui true
+    --firmware-binary true
+    --firmware-chroot true
+    --iso-application "TakesoraOS"
+    --iso-publisher "TakesoraOS Project"
+    --iso-volume "TakesoraOS Live"
+  )
+
+  add_lb_arg_if_supported "--mirror-bootstrap" "http://deb.debian.org/debian/"
+  add_lb_arg_if_supported "--mirror-chroot" "http://deb.debian.org/debian/"
+  add_lb_arg_if_supported "--mirror-chroot-security" "http://security.debian.org/debian-security/"
+  add_lb_arg_if_supported "--mirror-binary" "http://deb.debian.org/debian/"
+  add_lb_arg_if_supported "--mirror-binary-security" "http://security.debian.org/debian-security/"
+  add_lb_arg_if_supported "--security" "true"
+  add_lb_arg_if_supported "--updates" "true"
+  add_lb_arg_if_supported "--memtest" "memtest86+"
+
+  lb config "${LB_ARGS[@]}"
 }
 
 build_iso() {
