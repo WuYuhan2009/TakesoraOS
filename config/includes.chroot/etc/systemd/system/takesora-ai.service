@@ -1,0 +1,19 @@
+[Unit]
+Description=TakesoraOS AI Assistant Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=/usr/local/bin/takesora-ai-agent
+Restart=on-failure
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/log /etc/takesora-ai
+
+[Install]
+WantedBy=multi-user.target

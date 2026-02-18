@@ -1,0 +1,13 @@
+---
+componentName: takesoraos
+strings:
+  productName: TakesoraOS
+  shortProductName: TakesoraOS
+  version: 1.0
+  shortVersion: 1.0
+  versionedName: TakesoraOS 1.0
+  shortVersionedName: TakesoraOS 1.0
+  bootloaderEntryName: TakesoraOS
+images:
+  productLogo: "logo.png"
+slideshowAPI: 1

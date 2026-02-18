@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+
+mkdir -p /etc/calamares/modules /etc/calamares/branding/takesoraos
+cp -f /usr/share/takesora/calamares/settings.conf /etc/calamares/settings.conf
+cp -f /usr/share/takesora/calamares/branding.desc /etc/calamares/branding/takesoraos/branding.desc
+cp -f /usr/share/takesora/calamares/modules/partition.conf /etc/calamares/modules/partition.conf
+cp -f /usr/share/takesora/calamares/modules/users.conf /etc/calamares/modules/users.conf
+
+systemctl enable takesora-ai.service || true
+systemctl enable takesora-background-manager.service || true
+systemctl enable takesora-cleaner.timer || true
+systemctl enable takesora-health.timer || true
+
+if command -v dconf >/dev/null 2>&1; then
+  dconf update || true
+fi

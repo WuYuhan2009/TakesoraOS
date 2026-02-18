@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source /etc/takesora-ai/ai.env
+LOG_FILE="/var/log/takesora-ai.log"
+if [[ "${AI_ENABLED_BY_DEFAULT:-0}" != "1" ]]; then
+  echo "$(date -Is) AI disabled by policy" >> "$LOG_FILE"
+  sleep infinity
+fi
+prompt="System health summary for TakesoraOS"
+response="$(curl -sS https://api.siliconflow.cn/v1/chat/completions -H "Authorization: Bearer ${SILICONFLOW_API_KEY}" -H 'Content-Type: application/json' -d "{\"model\":\"${SILICONFLOW_MODEL}\",\"messages\":[{\"role\":\"user\",\"content\":\"${prompt}\"}]}" || true)"
+echo "$(date -Is) ${response}" >> "$LOG_FILE"
+sleep infinity

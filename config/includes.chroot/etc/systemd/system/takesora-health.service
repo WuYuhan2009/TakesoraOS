@@ -1,0 +1,6 @@
+[Unit]
+Description=TakesoraOS Health Score Reporter
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/takesora-health-score
