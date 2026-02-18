@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo || true
+flatpak install -y flathub \
+  com.tencent.WeChat \
+  com.tencent.qq \
+  com.wps.Office \
+  com.netease.CloudMusic \
+  com.obsproject.Studio \
+  com.alibaba.dingtalk || true

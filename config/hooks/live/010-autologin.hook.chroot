@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+mkdir -p /etc/systemd/system/getty@tty1.service.d
+cat > /etc/systemd/system/getty@tty1.service.d/override.conf <<EOT
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin user --noclear %I $TERM
+EOT
+
+usermod -aG sudo user || true
+echo 'user:user' | chpasswd || true

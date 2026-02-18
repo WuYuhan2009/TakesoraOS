@@ -1,0 +1,46 @@
+# Desktop base
+linux-image-amd64
+systemd-sysv
+gnome-core
+gdm3
+network-manager
+network-manager-gnome
+pipewire wireplumber
+flatpak
+gnome-software gnome-software-plugin-flatpak
+firefox-esr
+
+# Installer
+calamares
+calamares-settings-debian
+
+# Compatibility and gaming
+wine64
+winetricks
+lutris
+steam-installer
+gamemode
+mangohud
+dxvk
+waydroid
+
+# Security
+apparmor apparmor-utils apparmor-profiles
+nftables
+fail2ban
+openssh-server
+
+# Performance/utilities
+zram-tools
+zswap-config
+cpufrequtils
+thermald
+earlyoom
+curl jq
+
+# Chinese ecosystem helpers
+fonts-noto-cjk
+fcitx5 fcitx5-chinese-addons
+
+# Live extras
+memtest86+

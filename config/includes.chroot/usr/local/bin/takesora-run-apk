@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+APK_FILE="${1:-}"
+[[ -n "$APK_FILE" ]] || { echo "Usage: takesora-run-apk <file.apk>"; exit 1; }
+if ! systemctl is-active --quiet waydroid-container; then
+  pkexec systemctl start waydroid-container
+fi
+waydroid app install "$APK_FILE"

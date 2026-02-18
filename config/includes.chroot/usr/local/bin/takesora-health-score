@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+score=100
+systemctl is-active --quiet apparmor || score=$((score-10))
+systemctl is-active --quiet nftables || score=$((score-10))
+free_mem_mb=$(free -m | awk '/Mem:/ {print $7}')
+(( free_mem_mb < 512 )) && score=$((score-15))
+echo "TakesoraOS Health Score: ${score}/100"

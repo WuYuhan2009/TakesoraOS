@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+systemctl enable apparmor || true
+systemctl enable nftables || true
+systemctl enable fail2ban || true
+
+if [ -f /etc/ssh/sshd_config ]; then
+  sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+fi

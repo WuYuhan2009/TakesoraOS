@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+systemctl enable fstrim.timer || true
+systemctl enable thermald || true
+systemctl enable earlyoom || true
+
+if [ -f /etc/default/cpufrequtils ]; then
+  sed -i 's/^GOVERNOR=.*/GOVERNOR="performance"/' /etc/default/cpufrequtils || true
+else
+  cat > /etc/default/cpufrequtils <<EOT
+GOVERNOR="performance"
+EOT
+fi
