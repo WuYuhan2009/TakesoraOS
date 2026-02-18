@@ -92,7 +92,16 @@ sudo dd if=output/takesoraos-amd64.iso of=/dev/sdX bs=4M status=progress oflag=s
 
 ## 8. 常见问题
 
-### Q1：构建失败提示依赖缺失
+### Q1：报错 `security.debian.org bookworm/updates Release does not have a Release file`
+这是 Debian 安全源旧写法导致。新脚本会自动修复；你也可以手动修复后再构建：
+
+```bash
+sudo sed -Ei 's#^deb[[:space:]]+https?://security\.debian\.org[[:space:]]+bookworm/updates[[:space:]]+#deb http://security.debian.org/debian-security bookworm-security #g' /etc/apt/sources.list /etc/apt/sources.list.d/*.list
+sudo apt-get update
+./build.sh
+```
+
+### Q2：构建失败提示依赖缺失
 重新执行：
 
 ```bash
@@ -101,12 +110,12 @@ sudo apt-get -f install
 ./build.sh
 ```
 
-### Q2：想彻底重来
+### Q3：想彻底重来
 
 ```bash
 ./clean.sh
 ./build.sh
 ```
 
-### Q3：不想启用 AI 默认运行
+### Q4：不想启用 AI 默认运行
 脚本默认写入 `AI_ENABLED_BY_DEFAULT=0`，即默认关闭。

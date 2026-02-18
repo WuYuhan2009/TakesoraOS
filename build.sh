@@ -15,8 +15,33 @@ require_cmd() {
   }
 }
 
+
+fix_invalid_apt_sources() {
+  echo "[INFO] Checking APT sources for deprecated Debian security entries..."
+
+  local source_files=(/etc/apt/sources.list)
+  while IFS= read -r file; do
+    source_files+=("$file")
+  done < <(find /etc/apt/sources.list.d -maxdepth 1 -type f -name '*.list' 2>/dev/null || true)
+
+  local fixed=0
+  for file in "${source_files[@]}"; do
+    [[ -f "$file" ]] || continue
+    if sudo grep -Eq '^deb[[:space:]]+https?://security\.debian\.org[[:space:]]+bookworm/updates[[:space:]]+' "$file"; then
+      echo "[INFO] Fixing deprecated security source in $file"
+      sudo sed -Ei 's#^deb[[:space:]]+https?://security\.debian\.org[[:space:]]+bookworm/updates[[:space:]]+#deb http://security.debian.org/debian-security bookworm-security #g' "$file"
+      fixed=1
+    fi
+  done
+
+  if [[ "$fixed" -eq 1 ]]; then
+    echo "[INFO] Deprecated entries fixed."
+  fi
+}
+
 install_deps() {
   echo "[INFO] Installing build dependencies..."
+  fix_invalid_apt_sources
   sudo apt-get update
   sudo apt-get install -y --no-install-recommends \
     live-build debootstrap squashfs-tools xorriso grub-pc-bin grub-efi-amd64-bin \
@@ -68,6 +93,13 @@ configure_live_build() {
     --iso-application "TakesoraOS" \
     --iso-publisher "TakesoraOS Project" \
     --iso-volume "TakesoraOS Live" \
+    --mirror-bootstrap "http://deb.debian.org/debian/" \
+    --mirror-chroot "http://deb.debian.org/debian/" \
+    --mirror-chroot-security "http://security.debian.org/debian-security/" \
+    --mirror-binary "http://deb.debian.org/debian/" \
+    --mirror-binary-security "http://security.debian.org/debian-security/" \
+    --security true \
+    --updates true \
     --memtest memtest86+
 }
 
