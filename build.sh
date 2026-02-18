@@ -109,7 +109,11 @@ configure_live_build() {
   echo "[INFO] Configuring live-build..."
   lb clean --purge || true
 
-  LB_ARGS=(
+  LB_ARGS=()
+
+  add_lb_arg_if_supported "--ignore-system-defaults"
+
+  LB_ARGS+=(
     --mode debian
     --distribution bookworm
     --architectures amd64
@@ -131,7 +135,9 @@ configure_live_build() {
   add_lb_arg_if_supported "--mirror-chroot-security" "http://security.debian.org/debian-security/"
   add_lb_arg_if_supported "--mirror-binary" "http://deb.debian.org/debian/"
   add_lb_arg_if_supported "--mirror-binary-security" "http://security.debian.org/debian-security/"
-  add_lb_arg_if_supported "--security" "true"
+  # Older live-build versions may generate legacy bookworm/updates security entries.
+  # Force security auto-entry off and provide explicit security repo via config/archives.
+  add_lb_arg_if_supported "--security" "false"
   add_lb_arg_if_supported "--updates" "true"
   add_lb_arg_if_supported "--memtest" "memtest86+"
 

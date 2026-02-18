@@ -135,3 +135,18 @@ sudo apt-get install -y live-build
 - 当 API Key 为空时，脚本会写入 `AI_ENABLED_BY_DEFAULT=0`，默认禁用 AI。
 
 也可以手动修改：`config/includes.chroot/etc/takesora-ai/ai.env`。
+
+
+### Q6：为什么会出现 `bookworm/updates Release` 404 并中断？
+这是部分 live-build 版本在启用安全仓库参数时生成了过时的 `bookworm/updates` 安全源。
+项目已修复：
+- 构建时优先忽略系统级 `/etc/live/build.conf` 默认值（若版本支持）；
+- 对 `--security` 使用兼容策略，避免注入旧路径；
+- 在 `config/archives/flathub.list.chroot` 明确使用 `bookworm-security` 官方安全源。
+
+拉取最新代码后重新执行：
+
+```bash
+./clean.sh
+./build.sh
+```
