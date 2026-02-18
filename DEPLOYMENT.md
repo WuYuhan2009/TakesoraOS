@@ -37,6 +37,8 @@ TAKESORA_AI_MODEL="deepseek-ai/DeepSeek-V3" \
 ./build.sh
 ```
 
+> 提示：只要设置了 `TAKESORA_AI_API_KEY`，构建产物会默认启用 AI 服务。
+
 构建成功后输出：
 
 - `output/takesoraos-amd64.iso`
@@ -117,5 +119,8 @@ sudo apt-get -f install
 ./build.sh
 ```
 
-### Q4：不想启用 AI 默认运行
-脚本默认写入 `AI_ENABLED_BY_DEFAULT=0`，即默认关闭。
+### Q4：AI 默认是否启用？
+- 当你提供 `TAKESORA_AI_API_KEY`（或交互输入 API Key）时，脚本会写入 `AI_ENABLED_BY_DEFAULT=1`，默认启用 AI。
+- 当 API Key 为空时，脚本会写入 `AI_ENABLED_BY_DEFAULT=0`，默认禁用 AI。
+
+也可以手动修改：`config/includes.chroot/etc/takesora-ai/ai.env`。

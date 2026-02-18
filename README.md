@@ -20,7 +20,7 @@ chmod +x build.sh
 - Live 模式与图形安装入口（Calamares 配置）
 - GNOME 桌面 + GDM + 自动登录（Live）
 - Wine / Lutris / Waydroid 兼容层脚本
-- AI 服务（硅基流动 API）与权限隔离
+- AI 服务（硅基流动 API）与权限隔离（提供有效 API Key 时默认启用 AI 服务）
 - AppArmor / nftables / fail2ban 安全强化
 - zram/zswap/BBR/swappiness 等性能优化
 - 中国生态（Flatpak Flathub 预装策略）

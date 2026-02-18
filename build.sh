@@ -55,7 +55,7 @@ collect_ai_secrets() {
   if [[ -n "${TAKESORA_AI_API_KEY:-}" ]]; then
     api_key="$TAKESORA_AI_API_KEY"
   else
-    read -r -s -p "Enter SiliconFlow API key (leave empty to disable AI service by default): " api_key
+    read -r -s -p "Enter SiliconFlow API key (leave empty to keep AI disabled): " api_key
     echo
   fi
 
@@ -66,11 +66,19 @@ collect_ai_secrets() {
     model_name="${model_name:-deepseek-ai/DeepSeek-V3}"
   fi
 
+  local ai_enabled=0
+  if [[ -n "$api_key" ]]; then
+    ai_enabled=1
+    echo "[INFO] AI service will be enabled by default."
+  else
+    echo "[WARN] API key is empty; AI service will stay disabled by default."
+  fi
+
   install -m 0700 -d "$(dirname "$ai_env")"
   cat > "$ai_env" <<EOT
 SILICONFLOW_API_KEY=${api_key}
 SILICONFLOW_MODEL=${model_name}
-AI_ENABLED_BY_DEFAULT=0
+AI_ENABLED_BY_DEFAULT=${ai_enabled}
 EOT
   chmod 0600 "$ai_env"
 }
