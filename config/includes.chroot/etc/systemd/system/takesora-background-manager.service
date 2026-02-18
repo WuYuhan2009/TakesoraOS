@@ -1,0 +1,11 @@
+[Unit]
+Description=TakesoraOS Smart Background Manager
+After=graphical.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/bash -c 'while true; do systemd-cgls >/dev/null; sleep 30; done'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

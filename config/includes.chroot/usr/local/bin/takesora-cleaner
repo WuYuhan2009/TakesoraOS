@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+journalctl --vacuum-time=7d || true
+apt-get autoremove -y || true
+apt-get clean || true
+flatpak uninstall --unused -y || true

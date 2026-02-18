@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Takesora AI Panel
+Exec=gnome-terminal -- bash -lc 'echo "Takesora AI panel ready"; sleep 5'
+X-GNOME-Autostart-enabled=true

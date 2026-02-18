@@ -1,0 +1,22 @@
+#!/bin/sh
+set -e
+
+cat > /usr/share/applications/takesora-exe.desktop <<EOT
+[Desktop Entry]
+Name=Run Windows Program
+Exec=/usr/local/bin/takesora-run-exe %f
+Type=Application
+MimeType=application/x-ms-dos-executable;application/x-msi;application/x-ms-shortcut;
+NoDisplay=true
+EOT
+
+cat > /usr/share/applications/takesora-apk.desktop <<EOT
+[Desktop Entry]
+Name=Install Android APK
+Exec=/usr/local/bin/takesora-run-apk %f
+Type=Application
+MimeType=application/vnd.android.package-archive;
+NoDisplay=true
+EOT
+
+update-desktop-database /usr/share/applications || true

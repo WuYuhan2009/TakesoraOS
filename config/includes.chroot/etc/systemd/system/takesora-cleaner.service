@@ -1,0 +1,6 @@
+[Unit]
+Description=TakesoraOS Auto Cleaner
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/takesora-cleaner
